@@ -38,4 +38,17 @@ public class AirportController {
                 .status("OK")
                 .build();
     }
+
+    @PatchMapping("/{id}")
+    ApiResponse<AirportResponseDTO> updateAirport(@PathVariable int id, @RequestBody AirportRequestDTO airportRequestDTO) {
+        AirportResponseDTO airportResponseDTO = airportService.updateAirport(id, airportRequestDTO);
+        return ApiResponse.<AirportResponseDTO>builder()
+                .data(airportResponseDTO)
+                .success(true)
+                .code(200)
+                .message("Airport updated successfully")
+                .timestamp(System.currentTimeMillis())
+                .status("OK")
+                .build();
+    }
 }

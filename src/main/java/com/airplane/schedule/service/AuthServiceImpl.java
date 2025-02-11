@@ -98,12 +98,13 @@ public class AuthServiceImpl implements AuthService{
 
         var accessToken = generateToken(user, false, false);
         var refreshToken = generateToken(user, false, true);
+        String role = user.getRole().getName();
         UserActivityLog log = new UserActivityLog();
         log.setUserId(user.getId());
         log.setActivity("Login");
         userActivityLogRepository.save(log);
 
-        return AuthenticationResponseDTO.builder().accessToken(accessToken).refreshToken(refreshToken).authenticated(true).build();
+        return AuthenticationResponseDTO.builder().accessToken(accessToken).refreshToken(refreshToken).authenticated(true).role(role).build();
     }
 
     public void logout(HttpServletRequest request, IntrospectRequestDTO refreshToken) throws ParseException, JOSEException {

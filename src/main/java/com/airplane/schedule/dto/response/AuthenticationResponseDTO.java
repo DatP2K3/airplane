@@ -13,4 +13,5 @@ public class AuthenticationResponseDTO {
     private String accessToken;
     private String refreshToken;
     private boolean authenticated;
+    private String role;
 }

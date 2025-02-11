@@ -9,4 +9,6 @@ public interface AirportService {
     AirportResponseDTO createAirport(AirportRequestDTO airportRequestDTO);
     AirportResponseDTO getAirportByCode(String code);
     List<AirportResponseDTO> getPageAirports();
+
+    AirportResponseDTO updateAirport(int id, AirportRequestDTO airportRequestDTO);
 }
