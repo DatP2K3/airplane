@@ -33,7 +33,8 @@ public class FlightServiceImpl implements FlightSevice {
         if(flightRequestDTO.getDepartureTime().after(flightRequestDTO.getArrivalTime())) {
             throw new IllegalArgumentException("Departure time must be before arrival time.");
         }
-        Plane plane = planeRepository.findById(flightRequestDTO.getPlaneId()).orElseThrow(() -> new ResourceNotFoundException("Plane with id " + flightRequestDTO.getPlaneId() + " not found"));
+        Plane plane = planeRepository.findAvailablePlanes(flightRequestDTO.getDepartureTime(), flightRequestDTO.getArrivalTime()).stream().findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("No available plane for this flight"));
         Flight flight = flightMapper.flightRequestDTOToFlight(flightRequestDTO);
         flight.setPlane(plane);
         Airport deppature = airportRepository.findByCode(flightRequestDTO.getDepartureAirportCode());
@@ -46,6 +47,8 @@ public class FlightServiceImpl implements FlightSevice {
         flight.setEconomyClassPrice(flightRequestDTO.getEconomyClassPrice());
         flight.setFirstClassPrice(flightRequestDTO.getFirstClassPrice());
         flight.setStatus(flightRequestDTO.getStatus());
+        int randomSixDigits = (int) (Math.random() * 900000) + 100000;
+        flight.setFlightNumber("BNovel" + randomSixDigits);
         flightRepository.save(flight);
         return flightMapper.flightToFlightResponseDTO(flight);
     }

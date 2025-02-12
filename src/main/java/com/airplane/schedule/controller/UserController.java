@@ -106,17 +106,9 @@ public class UserController {
         return ResponseEntity.ok(apiResponse);
     }
 
-//    @PostMapping("/search")
-//    public ResponseEntity<PageApiResponse<List<UserResponseDTO>>> search(@RequestBody UserSearchRequest userSearchRequest) {
-//        PageApiResponse<List<UserResponseDTO>> pageApiResponse = userService.search(UserSearchRequest);
-//        ApiResponse<PageApiResponse<List<UserResponseDTO>>> apiResponse = ApiResponse.<List<UserResponseDTO>>builder()
-//                .data(PageApiResponse)
-//                .success(true)
-//                .code(200)
-//                .message("Users list retrieved successfully")
-//                .timestamp(System.currentTimeMillis())
-//                .status("OK")
-//                .build();
-//        return ResponseEntity.ok(apiResponse);
-//    }
+    @PostMapping("/search")
+    public ResponseEntity<PageApiResponse<List<UserResponseDTO>>> search(@RequestBody UserSearchRequest userSearchRequest) {
+        PageApiResponse<List<UserResponseDTO>> response = userService.search(userSearchRequest);
+        return ResponseEntity.ok(response);
+    }
 }

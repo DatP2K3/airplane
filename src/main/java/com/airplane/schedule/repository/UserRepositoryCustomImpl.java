@@ -30,8 +30,9 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         StringBuilder sql = new StringBuilder();
         if (!keyword.isBlank()) {
             sql.append(
-                    "where ( lower(u.username) like :keyword"
-                            + " or lower(u.email) like :keyword )");
+                    "where ( lower(u.firstName) like :keyword"
+                            + " or lower(u.email) like :keyword"
+                            + " or lower(u.lastName) like :keyword)");
             values.put("keyword", encodeKeyword(keyword));
         }
         return sql.toString();
@@ -49,7 +50,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         if (keyword == null) {
             return "%";
         }
-
         return "%" + keyword.trim().toLowerCase() + "%";
     }
 

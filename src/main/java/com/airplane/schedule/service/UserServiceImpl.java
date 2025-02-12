@@ -126,18 +126,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageApiResponse<List<UserResponseDTO>> search(UserSearchRequest userSearchRequest) {
-//        Long totalUsers = userRepository.count(userSearchRequest);
-//        List<User> users = userRepository.search(userSearchRequest);
-//        List <UserResponseDTO> userResponseDTOS = users.stream().map(userMapper::userToUserResponseDTO).collect(Collectors.toList());
-//        PageApiResponse.PageableResponse pageableResponse = PageApiResponse.PageableResponse.builder()
-//                .pageSize(userSearchRequest.getPageSize())
-//                .pageIndex(userSearchRequest.getPageIndex())
-//                .totalElements(totalUsers)
-//                .totalPages((int)(Math.ceil((double)totalUsers / userSearchRequest.getPageSize()))).build();
-//.totalPages((int) Math.ceil((double) departureFlightsResponseDTOs.size() / size))
-//                .totalElements(departureFlightsResponseDTOs.size())
-//                .hasNext((page + 1) * size < departureFlightsResponseDTOs.size())
-//                .hasPrevious(page > 0)
-        return null;
+        Long totalUsers = userRepository.count(userSearchRequest);
+        List<User> users = userRepository.search(userSearchRequest);
+        List <UserResponseDTO> userResponseDTOS = users.stream().map(userMapper::userToUserResponseDTO).collect(Collectors.toList());
+        PageApiResponse.PageableResponse pageableResponse = PageApiResponse.PageableResponse.builder()
+                .pageSize(userSearchRequest.getPageSize())
+                .pageIndex(userSearchRequest.getPageIndex())
+                .totalElements(totalUsers)
+                .totalPages((int)(Math.ceil((double)totalUsers / userSearchRequest.getPageSize())))
+                .hasNext((userSearchRequest.getPageIndex() + 1) * userSearchRequest.getPageSize() < totalUsers)
+                .hasPrevious(userSearchRequest.getPageIndex() >0).build();
+        return PageApiResponse.<List<UserResponseDTO>>builder()
+                .data(userResponseDTOS)
+                .success(true)
+                .code(200)
+                .pageable(pageableResponse)
+                .message("Search user successfully")
+                .timestamp(System.currentTimeMillis())
+                .status("OK")
+                .build();
     }
 }

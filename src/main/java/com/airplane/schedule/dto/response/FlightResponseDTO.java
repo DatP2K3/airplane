@@ -22,6 +22,7 @@ public class FlightResponseDTO {
     private int totalFirstClassPrice;
     private int totalBusinessClassPrice;
     private int totalEconomyClassPrice;
+    private String flightNumber;
     private Date createdAt;
     private Date updatedAt;
     private String createdBy;

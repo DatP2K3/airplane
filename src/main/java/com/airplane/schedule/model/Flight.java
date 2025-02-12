@@ -26,6 +26,9 @@ public class Flight {
     @Column(name = "id")
     private int id;
 
+    @Column(name = "flight_number")
+    private String flightNumber;
+
     @Column(name = "departure_time")
     private Date departureTime;
 
