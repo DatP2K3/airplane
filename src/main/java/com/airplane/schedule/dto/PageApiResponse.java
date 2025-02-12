@@ -1,6 +1,5 @@
-package com.airplane.schedule.dto.response;
+package com.airplane.schedule.dto;
 
-import com.airplane.schedule.dto.ApiResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
@@ -30,5 +29,9 @@ public class PageApiResponse<T> extends ApiResponse<T> {
     public static class PageableResponse {
         private int pageIndex;
         private int pageSize;
+        private int totalPages;
+        private long totalElements;
+        private boolean hasNext;
+        private boolean hasPrevious;
     }
 }

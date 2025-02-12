@@ -3,12 +3,9 @@ package com.airplane.schedule.controller;
 import com.airplane.schedule.dto.ApiResponse;
 import com.airplane.schedule.dto.request.PermissionRequest;
 import com.airplane.schedule.dto.request.PermissionSearchRequest;
-import com.airplane.schedule.dto.response.PageApiResponse;
 import com.airplane.schedule.dto.response.PermissionResponseDTO;
-import com.airplane.schedule.model.Permission;
 import com.airplane.schedule.service.PermissionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

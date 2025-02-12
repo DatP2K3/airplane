@@ -16,5 +16,6 @@ public class FlightAvailableRequestDTO {
     private Date returnDay;
     private String departureAirportCode;
     private String arrivalAirportCode;
-    private boolean isRoundTrip;
+    private int numberOfAdult;
+    private int numberOfChildren;
 }

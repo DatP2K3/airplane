@@ -1,9 +1,10 @@
 package com.airplane.schedule.controller;
 
 import com.airplane.schedule.dto.ApiResponse;
+import com.airplane.schedule.dto.PageApiResponse;
 import com.airplane.schedule.dto.request.PasswordRequestDTO;
 import com.airplane.schedule.dto.request.UserInforRequestDTO;
-import com.airplane.schedule.dto.request.UserRequestDTO;
+import com.airplane.schedule.dto.request.UserSearchRequest;
 import com.airplane.schedule.dto.response.UserResponseDTO;
 import com.airplane.schedule.service.UserService;
 import lombok.AccessLevel;
@@ -104,4 +105,18 @@ public class UserController {
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
+
+//    @PostMapping("/search")
+//    public ResponseEntity<PageApiResponse<List<UserResponseDTO>>> search(@RequestBody UserSearchRequest userSearchRequest) {
+//        PageApiResponse<List<UserResponseDTO>> pageApiResponse = userService.search(UserSearchRequest);
+//        ApiResponse<PageApiResponse<List<UserResponseDTO>>> apiResponse = ApiResponse.<List<UserResponseDTO>>builder()
+//                .data(PageApiResponse)
+//                .success(true)
+//                .code(200)
+//                .message("Users list retrieved successfully")
+//                .timestamp(System.currentTimeMillis())
+//                .status("OK")
+//                .build();
+//        return ResponseEntity.ok(apiResponse);
+//    }
 }

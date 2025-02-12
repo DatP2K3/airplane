@@ -1,8 +1,10 @@
 package com.airplane.schedule.service;
 
+import com.airplane.schedule.dto.PageApiResponse;
 import com.airplane.schedule.dto.request.PasswordRequestDTO;
 import com.airplane.schedule.dto.request.UserInforRequestDTO;
 import com.airplane.schedule.dto.request.UserRequestDTO;
+import com.airplane.schedule.dto.request.UserSearchRequest;
 import com.airplane.schedule.dto.response.UserResponseDTO;
 import com.airplane.schedule.exception.ResourceNotFoundException;
 import com.airplane.schedule.exception.UserAlreadyExistsException;
@@ -120,5 +122,22 @@ public class UserServiceImpl implements UserService {
         log.setUserId(user.getId());
         log.setActivity("Delete User");
         userActivityLogRepository.save(log);
+    }
+
+    @Override
+    public PageApiResponse<List<UserResponseDTO>> search(UserSearchRequest userSearchRequest) {
+//        Long totalUsers = userRepository.count(userSearchRequest);
+//        List<User> users = userRepository.search(userSearchRequest);
+//        List <UserResponseDTO> userResponseDTOS = users.stream().map(userMapper::userToUserResponseDTO).collect(Collectors.toList());
+//        PageApiResponse.PageableResponse pageableResponse = PageApiResponse.PageableResponse.builder()
+//                .pageSize(userSearchRequest.getPageSize())
+//                .pageIndex(userSearchRequest.getPageIndex())
+//                .totalElements(totalUsers)
+//                .totalPages((int)(Math.ceil((double)totalUsers / userSearchRequest.getPageSize()))).build();
+//.totalPages((int) Math.ceil((double) departureFlightsResponseDTOs.size() / size))
+//                .totalElements(departureFlightsResponseDTOs.size())
+//                .hasNext((page + 1) * size < departureFlightsResponseDTOs.size())
+//                .hasPrevious(page > 0)
+        return null;
     }
 }

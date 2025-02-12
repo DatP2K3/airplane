@@ -19,9 +19,9 @@ public class FlightResponseDTO {
     private String arrivalAirportName;
     private String planeModel;
     private String status;
-    private int firstClassPrice;
-    private int businessClassPrice;
-    private int economyClassPrice;
+    private int totalFirstClassPrice;
+    private int totalBusinessClassPrice;
+    private int totalEconomyClassPrice;
     private Date createdAt;
     private Date updatedAt;
     private String createdBy;
