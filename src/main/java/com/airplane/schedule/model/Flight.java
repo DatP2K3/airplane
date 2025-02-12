@@ -26,12 +26,6 @@ public class Flight {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "flight_number")
-    private String flightNumber;
-
-    @Column(name = "airline_name")
-    private String airlineName;
-
     @Column(name = "departure_time")
     private Date departureTime;
 
@@ -50,6 +44,20 @@ public class Flight {
 
     @Column(name = "status")
     private String status;
+
+    @OneToOne(cascade = {CascadeType.PERSIST,
+            CascadeType.MERGE, CascadeType.DETACH})
+    @JoinColumn(name = "plane_id")
+    private Plane plane;
+
+    @Column(name = "first_class_price")
+    private int firstClassPrice;
+
+    @Column(name = "business_class_price")
+    private int businessClassPrice;
+
+    @Column(name = "economy_class_price")
+    private int economyClassPrice;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)

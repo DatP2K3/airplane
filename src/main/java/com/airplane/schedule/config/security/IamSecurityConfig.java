@@ -21,6 +21,12 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 public class IamSecurityConfig {
     private final CustomJwtDecoder customJwtDecoder;
+    private final String[] PUBLIC_ENDPOINTS = {
+            "api/auth/token",
+            "auth",
+            "/api/auth/verify-otp",
+            "/api/auth/logout"
+    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {

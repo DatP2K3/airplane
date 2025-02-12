@@ -44,7 +44,7 @@ public class Ticket {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "ticket", cascade = {CascadeType.PERSIST,
+    @ManyToMany(mappedBy = "tickets", cascade = {CascadeType.PERSIST,
             CascadeType.MERGE, CascadeType.DETACH})
     private HashSet<Seat> seats;
 }

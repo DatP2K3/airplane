@@ -104,7 +104,7 @@ public class AuthServiceImpl implements AuthService{
         log.setActivity("Login");
         userActivityLogRepository.save(log);
 
-        return AuthenticationResponseDTO.builder().accessToken(accessToken).refreshToken(refreshToken).authenticated(true).role(role).build();
+        return AuthenticationResponseDTO.builder().accessToken(accessToken).refreshToken(refreshToken).authenticated(true).role(role).userId(user.getId()).build();
     }
 
     public void logout(HttpServletRequest request, IntrospectRequestDTO refreshToken) throws ParseException, JOSEException {
