@@ -1,4 +1,4 @@
-package com.airplane.schedule.service;
+package com.airplane.schedule.service.Impl;
 
 import com.airplane.schedule.dto.request.PermissionRequest;
 import com.airplane.schedule.dto.response.PermissionResponseDTO;

@@ -1,5 +1,6 @@
-package com.airplane.schedule.service;
+package com.airplane.schedule.service.Impl;
 
+import com.airplane.schedule.service.CloudinaryService;
 import com.cloudinary.Cloudinary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

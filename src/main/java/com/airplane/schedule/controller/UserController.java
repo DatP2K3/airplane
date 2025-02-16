@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +24,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
+    @PreAuthorize("hasPermission('user', 'read')")
     @GetMapping("/{id}")
     ApiResponse<UserResponseDTO> getUserById(@PathVariable int id) {
         UserResponseDTO userResponseDTO = userService.getUserById(id);
@@ -38,6 +40,7 @@ public class UserController {
         return apiResponse;
     }
 
+    @PreAuthorize("hasPermission('user', 'admin')")
     @GetMapping("")
     ResponseEntity<ApiResponse<List<UserResponseDTO>>> getAllUsers() {
         List<UserResponseDTO> userResponseDTOs = userService.getAllUsers();
@@ -52,6 +55,7 @@ public class UserController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @PreAuthorize("hasPermission('user', 'update')")
     @PatchMapping("/{id}/info")
     ResponseEntity<ApiResponse<UserResponseDTO>> updateInfoUser(@PathVariable int id, @RequestBody UserInforRequestDTO userInforRequestDTO) {
         UserResponseDTO userResponseDTO = userService.updateInfoUser(id, userInforRequestDTO);
@@ -66,6 +70,7 @@ public class UserController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @PreAuthorize("hasPermission('user', 'update')")
     @PatchMapping("/{email}/password")
     ResponseEntity<ApiResponse<Void>> updatePassword(@PathVariable String email, @RequestBody PasswordRequestDTO passwordRequestDTO) {
         userService.updatePassword(email, passwordRequestDTO);
@@ -79,6 +84,7 @@ public class UserController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @PreAuthorize("hasPermission('user', 'update')")
     @PostMapping("/avatar")
     public ResponseEntity<ApiResponse<String>> uploadAvatar(@RequestParam int id, @RequestParam("avatar") MultipartFile file) {
         String avatar = userService.updateAvatar(id, file);
@@ -93,6 +99,7 @@ public class UserController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @PreAuthorize("hasPermission('user', 'delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
@@ -106,6 +113,7 @@ public class UserController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @PreAuthorize("hasPermission('user', 'admin')")
     @PostMapping("/search")
     public ResponseEntity<PageApiResponse<List<UserResponseDTO>>> search(@RequestBody UserSearchRequest userSearchRequest) {
         PageApiResponse<List<UserResponseDTO>> response = userService.search(userSearchRequest);

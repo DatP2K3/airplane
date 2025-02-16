@@ -4,12 +4,13 @@ import com.airplane.schedule.dto.ApiResponse;
 import com.airplane.schedule.dto.request.*;
 import com.airplane.schedule.dto.response.AuthenticationResponseDTO;
 import com.airplane.schedule.dto.response.UserResponseDTO;
-import com.airplane.schedule.service.AuthServiceImpl;
+import com.airplane.schedule.service.Impl.AuthServiceImpl;
 import com.airplane.schedule.service.UserService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -54,6 +55,7 @@ public class AuthController {
         return ResponseEntity.ok(result);
     }
 
+
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request, @RequestBody IntrospectRequestDTO refreshToken)
             throws ParseException, JOSEException {
@@ -61,6 +63,7 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasPermission('user', 'update')")
     @PostMapping("/forgot-password")
     public ResponseEntity<String> requestPasswordReset(@RequestParam String email) {
         authServiceImpl.requestPasswordReset(email);

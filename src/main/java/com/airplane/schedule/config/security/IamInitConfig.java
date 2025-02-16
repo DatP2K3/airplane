@@ -12,10 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableMethodSecurity
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class IamInitConfig {
@@ -23,10 +25,10 @@ public class IamInitConfig {
     PasswordEncoder passwordEncoder;
 
     @NonFinal
-    static final String ADMIN_EMAIL = "admin@gmail.com";
+    static final String ADMIN_EMAIL = "ytbs1vn@gmail.com";
 
     @NonFinal
-    static final String ADMIN_PASSWORD = "admin";
+    static final String ADMIN_PASSWORD = "@123Hello";
 
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository) {
@@ -35,10 +37,12 @@ public class IamInitConfig {
             if (userRepository.findByEmail(ADMIN_EMAIL).isEmpty()) {
                 roleRepository.save(Role.builder()
                         .name("ROLE_USER")
+                        .isRoot(false)
                         .build());
 
                 Role adminRole = roleRepository.save(Role.builder()
                         .name("ROLE_ADMIN")
+                        .isRoot(true)
                         .build());
 
                 User user = User.builder()
@@ -47,7 +51,7 @@ public class IamInitConfig {
                         .build();
                 adminRole.assignRoleToUser(user);
                 roleRepository.save(adminRole);
-                log.warn("admin@gmail.com user has been created with default password: admin, please change it");
+                log.warn("ytbs1vn@gmail.com user has been created with default password: @123Hello, please change it");
             }
             log.info("Application initialization completed .....");
         };

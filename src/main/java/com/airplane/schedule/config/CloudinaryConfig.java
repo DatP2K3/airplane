@@ -1,4 +1,4 @@
-package com.airplane.schedule.config.cloudinary;
+package com.airplane.schedule.config;
 
 import com.cloudinary.Cloudinary;
 import org.springframework.beans.factory.annotation.Value;

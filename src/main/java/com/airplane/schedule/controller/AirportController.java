@@ -3,8 +3,9 @@ package com.airplane.schedule.controller;
 import com.airplane.schedule.dto.ApiResponse;
 import com.airplane.schedule.dto.request.AirportRequestDTO;
 import com.airplane.schedule.dto.response.AirportResponseDTO;
-import com.airplane.schedule.service.AirportServiceImpl;
+import com.airplane.schedule.service.Impl.AirportServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class AirportController {
     private final AirportServiceImpl airportService;
 
+    @PreAuthorize("hasPermission('airport', 'create')")
     @PostMapping("")
     ApiResponse<AirportResponseDTO> createAirport(@RequestBody AirportRequestDTO airportRequestDTO) {
         AirportResponseDTO airportResponseDTO = airportService.createAirport(airportRequestDTO);
@@ -39,6 +41,7 @@ public class AirportController {
                 .build();
     }
 
+    @PreAuthorize("hasPermission('airport', 'update')")
     @PatchMapping("/{id}")
     ApiResponse<AirportResponseDTO> updateAirport(@PathVariable int id, @RequestBody AirportRequestDTO airportRequestDTO) {
         AirportResponseDTO airportResponseDTO = airportService.updateAirport(id, airportRequestDTO);

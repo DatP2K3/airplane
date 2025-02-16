@@ -7,7 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,17 +25,14 @@ public class Ticket {
     @Column(name = "id")
     private int id;
 
+    @Column(name = "ticket_number")
+    private String ticketNumber;
+
     @Column(name = "price")
-    private double price;
+    private int price;
 
     @Column(name = "booking_date")
-    private String bookingDate;
-
-    @Column(name = "payment_method")
-    private String paymentMethod;
-
-    @Column(name = "ticket_status")
-    private String ticketStatus;
+    private Date bookingDate;
 
     @OneToOne(cascade = {CascadeType.PERSIST,
             CascadeType.MERGE, CascadeType.DETACH})
@@ -44,7 +44,38 @@ public class Ticket {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "dob")
+    private Date dob;
+
+    @Column(name = "cccd")
+    private String cccd;
+
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "status")
+    private String status;
+
     @ManyToMany(mappedBy = "tickets", cascade = {CascadeType.PERSIST,
             CascadeType.MERGE, CascadeType.DETACH})
-    private HashSet<Seat> seats;
+    private List<Seat> seats = new ArrayList<>();
+
+    public void addSeat(Seat seat){
+        if(seats == null){
+            seats = new ArrayList<>();
+        }
+        seats.add(seat);
+    }
 }

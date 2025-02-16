@@ -1,4 +1,4 @@
-package com.airplane.schedule.service;
+package com.airplane.schedule.service.Impl;
 
 import com.airplane.schedule.dto.request.AirportRequestDTO;
 import com.airplane.schedule.dto.response.AirportResponseDTO;
@@ -6,6 +6,7 @@ import com.airplane.schedule.exception.ResourceNotFoundException;
 import com.airplane.schedule.mapper.AirportMapper;
 import com.airplane.schedule.model.Airport;
 import com.airplane.schedule.repository.AirportRepository;
+import com.airplane.schedule.service.AirportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

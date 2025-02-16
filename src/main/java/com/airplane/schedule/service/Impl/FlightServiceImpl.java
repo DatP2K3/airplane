@@ -1,4 +1,4 @@
-package com.airplane.schedule.service;
+package com.airplane.schedule.service.Impl;
 
 import com.airplane.schedule.dto.request.FlightAvailableRequestDTO;
 import com.airplane.schedule.dto.request.FlightRequestDTO;
@@ -12,6 +12,7 @@ import com.airplane.schedule.repository.AirportRepository;
 import com.airplane.schedule.repository.FlightRepository;
 import com.airplane.schedule.repository.PlaneRepository;
 import com.airplane.schedule.repository.SeatRepository;
+import com.airplane.schedule.service.FlightSevice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +34,7 @@ public class FlightServiceImpl implements FlightSevice {
         if(flightRequestDTO.getDepartureTime().after(flightRequestDTO.getArrivalTime())) {
             throw new IllegalArgumentException("Departure time must be before arrival time.");
         }
-        Plane plane = planeRepository.findAvailablePlanes(flightRequestDTO.getDepartureTime(), flightRequestDTO.getArrivalTime()).stream().findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("No available plane for this flight"));
+        Plane plane = planeRepository.findById(flightRequestDTO.getPlaneId()).orElseThrow(() -> new ResourceNotFoundException("Plane with id " + flightRequestDTO.getPlaneId() + " not found"));
         Flight flight = flightMapper.flightRequestDTOToFlight(flightRequestDTO);
         flight.setPlane(plane);
         Airport deppature = airportRepository.findByCode(flightRequestDTO.getDepartureAirportCode());

@@ -4,7 +4,7 @@ import com.airplane.schedule.dto.ApiResponse;
 import com.airplane.schedule.dto.request.PlaneAvailableRequestDTO;
 import com.airplane.schedule.dto.request.PlaneRequestDTO;
 import com.airplane.schedule.dto.response.PlaneResponseDTO;
-import com.airplane.schedule.service.PlaneServiceImpl;
+import com.airplane.schedule.service.Impl.PlaneServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -67,4 +67,11 @@ public class Seat {
     @LastModifiedBy
     @Column(name = "last_modified_by")
     private String lastModifiedBy;
+
+    public void addTicket(Ticket ticket) {
+        if (tickets == null) {
+            tickets = new ArrayList<>();
+        }
+        tickets.add(ticket);
+    }
 }

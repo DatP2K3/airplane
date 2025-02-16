@@ -1,13 +1,13 @@
 package com.airplane.schedule.model.enums;
 
-public enum SeatType {
-    ECONOMY("Economy"),
-    BUSINESS("Business"),
-    FIRST_CLASS("FirstClass");
+public enum TicketStatus {
+    PENDING("Pending"),
+    SUCCESS("Success"),
+    CANCELLED("Cancel");
 
     private final String displayName;
 
-    SeatType(String displayName) {
+    TicketStatus(String displayName) {
         this.displayName = displayName;
     }
 

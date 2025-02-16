@@ -29,6 +29,9 @@ public class Role {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "is_root")
+    private boolean isRoot;
+
     @OneToMany(mappedBy = "role", cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     private Collection<User> users = new HashSet<>();

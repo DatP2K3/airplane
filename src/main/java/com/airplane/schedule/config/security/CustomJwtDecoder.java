@@ -1,7 +1,7 @@
 package com.airplane.schedule.config.security;
 
 import com.airplane.schedule.dto.request.IntrospectRequestDTO;
-import com.airplane.schedule.service.AuthServiceImpl;
+import com.airplane.schedule.service.Impl.AuthServiceImpl;
 import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jwt.Jwt;

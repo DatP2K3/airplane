@@ -1,4 +1,4 @@
-package com.airplane.schedule.service;
+package com.airplane.schedule.service.Impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

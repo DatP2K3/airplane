@@ -4,8 +4,9 @@ import com.airplane.schedule.dto.ApiResponse;
 import com.airplane.schedule.dto.request.FlightAvailableRequestDTO;
 import com.airplane.schedule.dto.request.FlightRequestDTO;
 import com.airplane.schedule.dto.response.FlightResponseDTO;
-import com.airplane.schedule.service.FlightServiceImpl;
+import com.airplane.schedule.service.Impl.FlightServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class FlightController {
     private final FlightServiceImpl flightService;
+
+    @PreAuthorize("hasPermission('flight', 'create')")
     @PostMapping("")
     ApiResponse<FlightResponseDTO> createFlight(@RequestBody FlightRequestDTO flightRequestDTO) {
         FlightResponseDTO flightResponseDTO = flightService.createFlight(flightRequestDTO);

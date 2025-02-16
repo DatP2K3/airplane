@@ -4,8 +4,9 @@ import com.airplane.schedule.dto.ApiResponse;
 import com.airplane.schedule.dto.request.PermissionRequest;
 import com.airplane.schedule.dto.request.PermissionSearchRequest;
 import com.airplane.schedule.dto.response.PermissionResponseDTO;
-import com.airplane.schedule.service.PermissionService;
+import com.airplane.schedule.service.Impl.PermissionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 public class PermissionController {
     private final PermissionService permissionService;
 
-//    @PreAuthorize("hasPermission(null, 'permission.create')")
+    @PreAuthorize("hasPermission('permission', 'create')")
     @PostMapping("/permissions")
     public ApiResponse<PermissionResponseDTO> createPermission(@RequestBody PermissionRequest permissionRequest) {
         PermissionResponseDTO permissionResponseDTO = permissionService.createPermission(permissionRequest);
@@ -31,8 +32,8 @@ public class PermissionController {
                 .build();
     }
 
+    @PreAuthorize("hasPermission('permission', 'admin')")
     @GetMapping("/permissions")
-//    @PreAuthorize("hasPermission(null, 'permission.read')")
     public ApiResponse<List<PermissionResponseDTO>> getAllPermissions(@RequestBody PermissionSearchRequest permissionSearchRequest) {
         List<PermissionResponseDTO> permissionResponseDTOS = permissionService.getAllPermission();
         return ApiResponse.<List<PermissionResponseDTO>>builder()

@@ -1,4 +1,4 @@
-package com.airplane.schedule.service;
+package com.airplane.schedule.service.Impl;
 
 import com.airplane.schedule.config.security.TokenProvider;
 import com.airplane.schedule.dto.request.AuthenticationRequestDTO;
@@ -13,11 +13,12 @@ import com.airplane.schedule.model.User;
 import com.airplane.schedule.model.UserActivityLog;
 import com.airplane.schedule.repository.UserActivityLogRepository;
 import com.airplane.schedule.repository.UserRepository;
+import com.airplane.schedule.service.AuthService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
-import com.airplane.schedule.exception.AuthException;
+import com.airplane.schedule.exception.AppException;
 import com.nimbusds.jwt.SignedJWT;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AuthServiceImpl implements AuthService{
+public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
@@ -59,7 +60,7 @@ public class AuthServiceImpl implements AuthService{
 
         try {
             verifyToken(token);
-        } catch (AuthException e) {
+        } catch (AppException e) {
             isValid = false;
         }
 
@@ -69,10 +70,10 @@ public class AuthServiceImpl implements AuthService{
     public void authenticate(AuthenticationRequestDTO request) {
         var user = userRepository
                 .findByEmail(request.getEmail())
-                .orElseThrow(() -> new AuthException(ErrorCode.USER_NOT_EXISTED));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
-        if (!authenticated) throw new AuthException(ErrorCode.UNAUTHENTICATED);
+        if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
 
         SecureRandom random = new SecureRandom();
         int otp = random.nextInt(900000) + 100000;
@@ -84,15 +85,15 @@ public class AuthServiceImpl implements AuthService{
 
     public AuthenticationResponseDTO verifyOtp(VerifyOtpRequestDTO verifyOtpRequestDTO) {
         if (!redisTemplate.hasKey(verifyOtpRequestDTO.getOtp())) {
-            throw new AuthException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
         if(!redisTemplate.opsForValue().get(verifyOtpRequestDTO.getOtp()).equals(verifyOtpRequestDTO.getEmail())){
-            throw new AuthException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
 
         User user = userRepository
                 .findByEmail(redisTemplate.opsForValue().get(verifyOtpRequestDTO.getOtp()).toString())
-                .orElseThrow(() -> new AuthException(ErrorCode.USER_NOT_EXISTED));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         redisTemplate.delete(verifyOtpRequestDTO.getOtp());
 
@@ -132,7 +133,7 @@ public class AuthServiceImpl implements AuthService{
             log.setUserId(signedJWT_access.getJWTClaimsSet().getIntegerClaim("userId"));
             log.setActivity("Logout");
             userActivityLogRepository.save(log);
-        } catch (AuthException exception) {
+        } catch (AppException exception) {
             log.info("Token already expired");
         }
     }
@@ -145,7 +146,7 @@ public class AuthServiceImpl implements AuthService{
 
         var signedJWT = verifyToken(refreshToken);
         var username = signedJWT.getJWTClaimsSet().getSubject();
-        var user = userRepository.findByEmail(username).orElseThrow(() -> new AuthException(ErrorCode.UNAUTHENTICATED));
+        var user = userRepository.findByEmail(username).orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
         var accessToken = generateToken(user, false, false);
 
         return AuthenticationResponseDTO.builder().accessToken(accessToken).authenticated(true).build();
@@ -165,10 +166,10 @@ public class AuthServiceImpl implements AuthService{
 
         var verified = signedJWT.verify(verifier);
 
-        if (!(verified && expiryTime.after(new Date()))) throw new AuthException(ErrorCode.UNAUTHENTICATED);
+        if (!(verified && expiryTime.after(new Date()))) throw new AppException(ErrorCode.UNAUTHENTICATED);
 
         if (redisTemplate.hasKey(signedJWT.getJWTClaimsSet().getJWTID())) {
-            throw new AuthException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
         return signedJWT;
     }
@@ -223,16 +224,16 @@ public class AuthServiceImpl implements AuthService{
         try {
             User user = userRepository
                     .findByEmail(email)
-                    .orElseThrow(() -> new AuthException(ErrorCode.USER_NOT_EXISTED));
+                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
             String token = generateToken(user, true, false);
 
             String resetLink = "http://127.0.0.1:5500/resetPassword.html?token=" + token;
 
             emailService.sendMailForResetPassWord(email, resetLink);
         } catch (ResourceNotFoundException ex) {
-            throw new AuthException(ErrorCode.USER_NOT_EXISTED);
+            throw new AppException(ErrorCode.USER_NOT_EXISTED);
         } catch (Exception ex) {
-            throw new AuthException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }
 
@@ -240,7 +241,7 @@ public class AuthServiceImpl implements AuthService{
         try {
             SignedJWT signedJWT = verifyToken(token);
             String email = signedJWT.getJWTClaimsSet().getSubject();
-            User user = userRepository.findByEmail(email).orElseThrow(() -> new AuthException(ErrorCode.USER_NOT_EXISTED));
+            User user = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
             user.setPassword(passwordEncoder.encode(newPassword));
             userRepository.save(user);
             emailService.sendMailAlert(email, "change_password");
@@ -250,10 +251,10 @@ public class AuthServiceImpl implements AuthService{
             log.setActivity("Reset PassWord");
             userActivityLogRepository.save(log);
 
-        } catch (AuthException ex) {
-            throw new AuthException(ErrorCode.INVALID_KEY);
+        } catch (AppException ex) {
+            throw new AppException(ErrorCode.INVALID_KEY);
         } catch (Exception ex) {
-            throw new AuthException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }
 }

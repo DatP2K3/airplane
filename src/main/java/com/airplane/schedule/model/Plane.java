@@ -23,7 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "plans")
+@Table(name = "planes")
 public class Plane {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
