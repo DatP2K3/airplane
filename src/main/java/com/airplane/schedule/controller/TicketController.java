@@ -14,6 +14,7 @@ import com.airplane.schedule.util.VNPayUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class TicketController {
     private final TicketService ticketService;
     private final VNPAYConfig vnPayConfig;
 
+    @PreAuthorize("hasPermission('ticket', 'create')")
     @PostMapping("/tickets")
     public ApiResponse<TicketResponseDTO> createTicket(@RequestBody TicketRequestDTO ticketRequestDTO, HttpServletRequest request) {
         TicketResponseDTO ticketResponseDTO = ticketService.createTicket(ticketRequestDTO, request);
@@ -39,6 +41,7 @@ public class TicketController {
                 .build();
     }
 
+    @PreAuthorize("hasPermission('ticket', 'update')")
     @PatchMapping("/tickets/status/{ticketNumber}")
     public ApiResponse<String> ticketHandler(@PathVariable String ticketNumber, @RequestParam String status) {
         String statusTicket = ticketService.updateTicketStatus(ticketNumber, status);
@@ -52,12 +55,14 @@ public class TicketController {
                 .build();
     }
 
+    @PreAuthorize("hasPermission('user', 'admin')")
     @PostMapping("/tickets/search")
     public ResponseEntity<PageApiResponse<List<TicketResponseDTO>>> searchTicket(@RequestBody TicketSearchRequest ticketSearchRequest) {
         PageApiResponse<List<TicketResponseDTO>> response = ticketService.searchTicket(ticketSearchRequest);
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasPermission('ticket', 'read')")
     @GetMapping("/tickets/{ticketNumber}")
     public ApiResponse<TicketResponseDTO> getTicketByTicketNumber(@PathVariable String ticketNumber) {
         TicketResponseDTO ticketResponseDTO = ticketService.getTicketByTicketNumber(ticketNumber);

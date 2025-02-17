@@ -1,8 +1,9 @@
 package com.airplane.schedule.repository;
 
+import com.airplane.schedule.dto.request.FlightSearchRequest;
 import com.airplane.schedule.dto.request.TicketSearchRequest;
+import com.airplane.schedule.model.Flight;
 import com.airplane.schedule.model.Ticket;
-import com.airplane.schedule.model.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -12,18 +13,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TicketRepositoryCustomImpl implements TicketRepositoryCustom {
+public class FlightRepositoryCustomImpl implements FlightRepositoryCustom {
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    public List<Ticket> search(TicketSearchRequest ticketSearchRequest) {
+    public List<Flight> search(FlightSearchRequest flightSearchRequest) {
         Map<String, Object> values = new HashMap<>();
-        String sql = "select t from Ticket t " + createWhereQuery(ticketSearchRequest.getKeyword(), values) + createOrderQuery(ticketSearchRequest.getSortBy());
-        Query query = entityManager.createQuery(sql, Ticket.class);
+        String sql = "select f from Flight f " + createWhereQuery(flightSearchRequest.getKeyword(), values) + createOrderQuery(flightSearchRequest.getSortBy());
+        Query query = entityManager.createQuery(sql, Flight.class);
         values.forEach(query::setParameter);
-        query.setFirstResult((ticketSearchRequest.getPageIndex() - 1) * ticketSearchRequest.getPageSize());
-        query.setMaxResults(ticketSearchRequest.getPageSize());
+        query.setFirstResult((flightSearchRequest.getPageIndex() - 1) * flightSearchRequest.getPageSize());
+        query.setMaxResults(flightSearchRequest.getPageSize());
         return query.getResultList();
     }
 
@@ -31,7 +32,7 @@ public class TicketRepositoryCustomImpl implements TicketRepositoryCustom {
         StringBuilder sql = new StringBuilder();
         if (!keyword.isBlank()) {
             sql.append(
-                    "where lower(t.ticketNumber) like :keyword");
+                    "where lower(f.flightNumber) like :keyword");
             values.put("keyword", encodeKeyword(keyword));
         }
         return sql.toString();
@@ -40,7 +41,7 @@ public class TicketRepositoryCustomImpl implements TicketRepositoryCustom {
     public StringBuilder createOrderQuery(String sortBy) {
         StringBuilder hql = new StringBuilder(" ");
         if (StringUtils.hasLength(sortBy)) {
-            hql.append(" order by t.").append(sortBy.replace(".", " "));
+            hql.append(" order by f.").append(sortBy.replace(".", " "));
         }
         return hql;
     }
@@ -53,9 +54,9 @@ public class TicketRepositoryCustomImpl implements TicketRepositoryCustom {
     }
 
     @Override
-    public Long count(TicketSearchRequest ticketSearchRequest) {
+    public Long count(FlightSearchRequest flightSearchRequest) {
         Map<String, Object> values = new HashMap<>();
-        String sql = "select count(t) from Ticket t " + createWhereQuery(ticketSearchRequest.getKeyword(), values);
+        String sql = "select count(f) from Flight f " + createWhereQuery(flightSearchRequest.getKeyword(), values);
         Query query = entityManager.createQuery(sql, Long.class);
         values.forEach(query::setParameter);
         return (Long) query.getSingleResult();

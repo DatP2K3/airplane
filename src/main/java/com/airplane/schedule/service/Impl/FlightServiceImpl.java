@@ -1,8 +1,11 @@
 package com.airplane.schedule.service.Impl;
 
+import com.airplane.schedule.dto.PageApiResponse;
 import com.airplane.schedule.dto.request.FlightAvailableRequestDTO;
 import com.airplane.schedule.dto.request.FlightRequestDTO;
+import com.airplane.schedule.dto.request.FlightSearchRequest;
 import com.airplane.schedule.dto.response.FlightResponseDTO;
+import com.airplane.schedule.dto.response.TicketResponseDTO;
 import com.airplane.schedule.exception.ResourceNotFoundException;
 import com.airplane.schedule.mapper.FlightMapper;
 import com.airplane.schedule.model.Airport;
@@ -19,13 +22,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class FlightServiceImpl implements FlightSevice {
     private final FlightRepository flightRepository;
     private final PlaneRepository planeRepository;
-    private final SeatRepository seatRepository;
     private final AirportRepository airportRepository;
     private final FlightMapper flightMapper;
 
@@ -67,6 +70,29 @@ public class FlightServiceImpl implements FlightSevice {
             flightResponseDTOs.add(flightResponseDTO);
         }
         return flightResponseDTOs;
+    }
+
+    @Override
+    public PageApiResponse<List<FlightResponseDTO>> searchFlight(FlightSearchRequest flightSearchRequest) {
+        Long totalFlight= flightRepository.count(flightSearchRequest);
+        List<Flight> flights = flightRepository.search(flightSearchRequest);
+        List<FlightResponseDTO> flightResponseDTOS = flights.stream().map(flightMapper::flightToFlightResponseDTO).collect(Collectors.toList());
+        PageApiResponse.PageableResponse pageableResponse = PageApiResponse.PageableResponse.builder()
+                .pageSize(flightSearchRequest.getPageSize())
+                .pageIndex(flightSearchRequest.getPageIndex())
+                .totalElements(totalFlight)
+                .totalPages((int)(Math.ceil((double)totalFlight / flightSearchRequest.getPageSize())))
+                .hasNext((flightSearchRequest.getPageIndex() + 1) * flightSearchRequest.getPageSize() < totalFlight)
+                .hasPrevious(flightSearchRequest.getPageIndex() >0).build();
+        return PageApiResponse.<List<FlightResponseDTO>>builder()
+                .data(flightResponseDTOS)
+                .success(true)
+                .code(200)
+                .pageable(pageableResponse)
+                .message("Search flights successfully")
+                .timestamp(System.currentTimeMillis())
+                .status("OK")
+                .build();
     }
 
     @Override

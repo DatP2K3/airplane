@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Date;
 import java.util.List;
 
-public interface FlightRepository extends JpaRepository<Flight, Integer> {
+public interface FlightRepository extends JpaRepository<Flight, Integer>, FlightRepositoryCustom {
     @Query("SELECT f FROM Flight f " +
             "WHERE f.departureAirport.code = :departureCode " +
             "AND f.arrivalAirport.code = :arrivalCode " +
@@ -29,4 +29,7 @@ public interface FlightRepository extends JpaRepository<Flight, Integer> {
             @Param("arrivalCode") String arrivalCode,
             @Param("returnDate") Date returnDate
     );
+
+    @Query("SELECT COUNT(f) FROM Flight f WHERE FUNCTION('DATE', f.departureTime) = CURRENT_DATE")
+    int getTotalFlightsToday();
 }

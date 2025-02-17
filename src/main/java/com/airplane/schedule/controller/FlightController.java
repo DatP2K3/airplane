@@ -1,11 +1,15 @@
 package com.airplane.schedule.controller;
 
 import com.airplane.schedule.dto.ApiResponse;
+import com.airplane.schedule.dto.PageApiResponse;
 import com.airplane.schedule.dto.request.FlightAvailableRequestDTO;
 import com.airplane.schedule.dto.request.FlightRequestDTO;
+import com.airplane.schedule.dto.request.FlightSearchRequest;
 import com.airplane.schedule.dto.response.FlightResponseDTO;
+import com.airplane.schedule.dto.response.TicketResponseDTO;
 import com.airplane.schedule.service.Impl.FlightServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,5 +63,12 @@ public class FlightController {
                 .timestamp(System.currentTimeMillis())
                 .status("OK")
                 .build();
+    }
+
+    @PreAuthorize("hasPermission('flight', 'admin')")
+    @PostMapping("/search")
+    ResponseEntity<PageApiResponse<List<FlightResponseDTO>>> searchFlight(@RequestBody FlightSearchRequest flightSearchRequest) {
+        PageApiResponse<List<FlightResponseDTO>> response = flightService.searchFlight(flightSearchRequest);
+        return ResponseEntity.ok(response);
     }
 }

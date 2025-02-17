@@ -28,7 +28,11 @@ public class IamSecurityConfig {
             "api/auth/token",
             "auth",
             "/api/auth/verify-otp",
-            "/api/auth/logout"
+            "/api/auth/logout",
+            "/api/planes/available",
+            "/api/flights/available-not-return",
+            "/api/flights/available",
+            "/api/airports/code/**",
     };
 
     @Bean

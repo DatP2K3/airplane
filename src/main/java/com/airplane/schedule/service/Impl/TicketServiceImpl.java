@@ -74,14 +74,14 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public PageApiResponse<List<TicketResponseDTO>> searchTicket(TicketSearchRequest ticketSearchRequest) {
         List<Ticket> tickets = ticketRepository.search(ticketSearchRequest);
-        Long totalUsers = ticketRepository.count(ticketSearchRequest);
+        Long totalTicket = ticketRepository.count(ticketSearchRequest);
         List<TicketResponseDTO> ticketResponseDTOS = tickets.stream().map(ticketMapper::ticketToTicketResponseDTO).collect(Collectors.toList());
         PageApiResponse.PageableResponse pageableResponse = PageApiResponse.PageableResponse.builder()
                 .pageSize(ticketSearchRequest.getPageSize())
                 .pageIndex(ticketSearchRequest.getPageIndex())
-                .totalElements(totalUsers)
-                .totalPages((int)(Math.ceil((double)totalUsers / ticketSearchRequest.getPageSize())))
-                .hasNext((ticketSearchRequest.getPageIndex() + 1) * ticketSearchRequest.getPageSize() < totalUsers)
+                .totalElements(totalTicket)
+                .totalPages((int)(Math.ceil((double)totalTicket / ticketSearchRequest.getPageSize())))
+                .hasNext((ticketSearchRequest.getPageIndex() + 1) * ticketSearchRequest.getPageSize() < totalTicket)
                 .hasPrevious(ticketSearchRequest.getPageIndex() >0).build();
         return PageApiResponse.<List<TicketResponseDTO>>builder()
                 .data(ticketResponseDTOS)

@@ -28,7 +28,7 @@ public class AirportController {
                 .build();
     }
 
-    @GetMapping("/{code}")
+    @GetMapping("/code/{code}")
     ApiResponse<AirportResponseDTO> getAirportByCode(@PathVariable String code) {
         AirportResponseDTO airportResponseDTO = airportService.getAirportByCode(code);
         return ApiResponse.<AirportResponseDTO>builder()
