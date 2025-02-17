@@ -57,8 +57,23 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.UserRequestDTOToUser(userRequestDTO);
         String password = passwordEncoder.encode(user.getPassword());
         user.setPassword(password);
-        Role role = roleRepository.findById(userRequestDTO.getRoleId())
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found with id: " + userRequestDTO.getRoleId()));
+        Role role = roleRepository.findByName("ROLE_USER")
+                .orElseThrow(() -> new ResourceNotFoundException("ROLE_USER not found"));
+        role.assignRoleToUser(user);
+        emailService.sendMailAlert(user.getEmail(), "signin");
+        return userMapper.userToUserResponseDTO(userRepository.save(user));
+    }
+
+    @Override
+    public UserResponseDTO createAdmin(UserRequestDTO userRequestDTO) {
+        if (userRepository.existsByEmail((userRequestDTO.getEmail()))) {
+            throw new UserAlreadyExistsException(userRequestDTO.getEmail() + " already exists");
+        }
+        User user = userMapper.UserRequestDTOToUser(userRequestDTO);
+        String password = passwordEncoder.encode(user.getPassword());
+        user.setPassword(password);
+        Role role = roleRepository.findByName("ROLE_ADMIN")
+                .orElseThrow(() -> new ResourceNotFoundException("ROLE_ADMIN not found"));
         role.assignRoleToUser(user);
         emailService.sendMailAlert(user.getEmail(), "signin");
         return userMapper.userToUserResponseDTO(userRepository.save(user));

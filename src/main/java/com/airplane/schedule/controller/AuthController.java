@@ -75,4 +75,20 @@ public class AuthController {
         authServiceImpl.resetPassword(token, passwordRequestDTO.getNewPassword());
         return ResponseEntity.ok("Password successfully reset");
     }
+
+    @PreAuthorize("hasPermission('user', 'admin')")
+    @PostMapping("/create-admin")
+    ApiResponse<UserResponseDTO> createAdmin(@RequestBody UserRequestDTO userRequestDTO) {
+        UserResponseDTO userResponseDTO = userService.createAdmin(userRequestDTO);
+        ApiResponse<UserResponseDTO> apiResponse = ApiResponse.<UserResponseDTO>builder()
+                .data(userResponseDTO)
+                .success(true)
+                .code(201)
+                .message("Admin created successfully")
+                .timestamp(System.currentTimeMillis())
+                .status("OK")
+                .build();
+        return apiResponse;
+    }
+
 }

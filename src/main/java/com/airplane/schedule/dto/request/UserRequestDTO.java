@@ -33,6 +33,4 @@ public class UserRequestDTO {
     @NotBlank(message = "Avatar cannot be blank")
     @URL(message = "Avatar must be a valid URL")
     String avatar;
-    @NotNull(message = "Role cannot be null")
-    int roleId;
 }

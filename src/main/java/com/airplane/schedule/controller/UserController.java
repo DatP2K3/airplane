@@ -119,4 +119,5 @@ public class UserController {
         PageApiResponse<List<UserResponseDTO>> response = userService.search(userSearchRequest);
         return ResponseEntity.ok(response);
     }
+
 }

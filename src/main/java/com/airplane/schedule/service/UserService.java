@@ -14,6 +14,7 @@ public interface UserService {
     UserResponseDTO getUserById(int id);
     List<UserResponseDTO> getAllUsers();
     UserResponseDTO createUser(UserRequestDTO userRequestDTO);
+    UserResponseDTO createAdmin(UserRequestDTO userRequestDTO);
     UserResponseDTO updateInfoUser(int id, UserInforRequestDTO userInforRequestDTO);
     void updatePassword(String email, PasswordRequestDTO passwordRequestDTO);
     String updateAvatar(int id, MultipartFile avatar);
