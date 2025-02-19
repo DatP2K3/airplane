@@ -6,11 +6,7 @@ import com.airplane.schedule.dto.PageApiResponse;
 import com.airplane.schedule.dto.request.TicketRequestDTO;
 import com.airplane.schedule.dto.request.TicketSearchRequest;
 import com.airplane.schedule.dto.response.TicketResponseDTO;
-import com.airplane.schedule.dto.response.UserResponseDTO;
-import com.airplane.schedule.model.Ticket;
-import com.airplane.schedule.model.enums.TicketStatus;
 import com.airplane.schedule.service.TicketService;
-import com.airplane.schedule.util.VNPayUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +14,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
