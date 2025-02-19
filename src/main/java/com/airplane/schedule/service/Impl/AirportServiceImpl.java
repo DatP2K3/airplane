@@ -22,6 +22,10 @@ public class AirportServiceImpl implements AirportService {
 
     @Override
     public AirportResponseDTO createAirport(AirportRequestDTO airportRequestDTO) {
+        boolean check = airportRepository.existsByCode(airportRequestDTO.getCode());
+        if(check) {
+            throw new ResourceNotFoundException("Airport with code " + airportRequestDTO.getCode() + " already exists");
+        }
         Airport airport = airportMapper.airportRequestDTOToAirport(airportRequestDTO);
         return airportMapper.airportToAirportResponseDTO(airportRepository.save(airport));
     }

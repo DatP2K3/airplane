@@ -14,4 +14,6 @@ public interface PlaneRepository extends JpaRepository<Plane, Integer> {
             "WHERE (f.departureTime <= :newArrivalTime AND f.arrivalTime >= :newDepartureTime))")
     List<Plane> findAvailablePlanes(@Param("newDepartureTime") Date newDepartureTime,
                                     @Param("newArrivalTime") Date newArrivalTime);
+
+    boolean existsByPlaneName(String planeName);
 }

@@ -38,6 +38,10 @@ public class FlightServiceImpl implements FlightSevice {
             throw new IllegalArgumentException("Departure time must be before arrival time.");
         }
         Plane plane = planeRepository.findById(flightRequestDTO.getPlaneId()).orElseThrow(() -> new ResourceNotFoundException("Plane with id " + flightRequestDTO.getPlaneId() + " not found"));
+        List<Plane> planes = planeRepository.findAvailablePlanes(flightRequestDTO.getDepartureTime(), flightRequestDTO.getArrivalTime());
+        if(!planes.contains(plane)) {
+            throw new IllegalArgumentException("Plane with id " + flightRequestDTO.getPlaneId() + " is not available at this time.");
+        }
         Flight flight = flightMapper.flightRequestDTOToFlight(flightRequestDTO);
         flight.setPlane(plane);
         Airport deppature = airportRepository.findByCode(flightRequestDTO.getDepartureAirportCode());

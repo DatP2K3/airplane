@@ -22,6 +22,10 @@ public class PlaneServiceImpl implements PlaneService {
     private final PlaneMapper planeMapper;
     @Override
     public PlaneResponseDTO createPlane(PlaneRequestDTO planeRequestDTO) {
+        boolean check = planeRepository.existsByPlaneName(planeRequestDTO.getPlaneName());
+        if(check) {
+            throw new IllegalArgumentException("Plane with name " + planeRequestDTO.getPlaneName() + " already exists");
+        }
         Plane plane = planeMapper.planeRequestDTOToPlane(planeRequestDTO);
         if(planeRequestDTO.getModel().equals(ModelPlane.AP_A220.getDisplayName())) {
             for(int i = 1; i < 5; i++) {
