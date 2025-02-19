@@ -55,10 +55,10 @@ public class IamSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*")); // Cho phép tất cả các origin
-        configuration.setAllowedMethods(List.of("*")); // Cho phép tất cả phương thức HTTP
-        configuration.setAllowedHeaders(List.of("*")); // Cho phép tất cả các header
-        configuration.setAllowCredentials(true); // Cho phép gửi cookie nếu cần
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
