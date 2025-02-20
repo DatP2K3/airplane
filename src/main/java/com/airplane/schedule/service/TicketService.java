@@ -14,4 +14,5 @@ public interface TicketService {
     String updateTicketStatus(String ticketNumber, String status);
     PageApiResponse<List<TicketResponseDTO>> searchTicket(TicketSearchRequest ticketSearchRequest);
     TicketResponseDTO getTicketByTicketNumber(String ticketNumber);
+    List<TicketResponseDTO> getAllTicketsByUserId(int userId);
 }

@@ -70,4 +70,19 @@ public class TicketController {
                 .status("OK")
                 .build();
     }
+
+    @PreAuthorize("hasPermission('ticket', 'read')")
+    @GetMapping("/tickets/user/{userId}")
+    public ApiResponse<List<TicketResponseDTO>> getAllTicketsByUserId(@PathVariable int userId) {
+        List<TicketResponseDTO> ticketResponseDTOS = ticketService.getAllTicketsByUserId(userId);
+        return ApiResponse.<List<TicketResponseDTO>>builder()
+                .data(ticketResponseDTOS)
+                .success(true)
+                .code(200)
+                .message("Tickets retrieved successfully")
+                .timestamp(System.currentTimeMillis())
+                .status("OK")
+                .build();
+    }
+
 }

@@ -6,7 +6,6 @@ import com.airplane.schedule.dto.PageApiResponse;
 import com.airplane.schedule.dto.request.TicketRequestDTO;
 import com.airplane.schedule.dto.request.TicketSearchRequest;
 import com.airplane.schedule.dto.response.TicketResponseDTO;
-import com.airplane.schedule.dto.response.UserResponseDTO;
 import com.airplane.schedule.exception.AppException;
 import com.airplane.schedule.exception.ErrorCode;
 import com.airplane.schedule.mapper.TicketMapper;
@@ -14,6 +13,7 @@ import com.airplane.schedule.model.*;
 import com.airplane.schedule.model.enums.TicketStatus;
 import com.airplane.schedule.repository.FlightRepository;
 import com.airplane.schedule.repository.TicketRepository;
+import com.airplane.schedule.repository.UserRepository;
 import com.airplane.schedule.service.TicketService;
 import com.airplane.schedule.util.VNPayUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +33,7 @@ public class TicketServiceImpl implements TicketService {
     private final TicketRepository ticketRepository;
     private final TicketMapper ticketMapper;
     private final VNPAYConfig vnPayConfig;
-
+    private final UserRepository userRepository;
     @Override
     public TicketResponseDTO createTicket(TicketRequestDTO ticketRequestDTO, HttpServletRequest request) {
         Ticket ticket = ticketMapper.ticketRequestDTOToTicket(ticketRequestDTO);
@@ -56,6 +56,8 @@ public class TicketServiceImpl implements TicketService {
         ticket.setBookingDate(flight.getDepartureTime());
         ticket.setStatus(TicketStatus.PENDING.getDisplayName());
         ticket.setTicketNumber("BNovel" + VNPayUtil.getRandomNumber(6));
+        User user = userRepository.findById(ticketRequestDTO.getUserId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        ticket.setUser(user);
         ticket = ticketRepository.save(ticket);
         TicketResponseDTO ticketResponseDTO = ticketMapper.ticketToTicketResponseDTO(ticket);
         ticketResponseDTO.setPayUrl(getPayUrl(request, ticket.getPrice(), ticket.getTicketNumber()));
@@ -99,6 +101,13 @@ public class TicketServiceImpl implements TicketService {
         Ticket ticket = ticketRepository.findByTicketNumber(ticketNumber).orElseThrow(() -> new AppException(ErrorCode.TICKET_NOT_EXISTED));
         return ticketMapper.ticketToTicketResponseDTO(ticket);
     }
+
+    @Override
+    public List<TicketResponseDTO> getAllTicketsByUserId(int userId) {
+        List<Ticket> tickets = ticketRepository.findTicketsByUserId(userId);
+        return tickets.stream().map(ticketMapper::ticketToTicketResponseDTO).collect(Collectors.toList());
+    }
+
 
     private String getPayUrl(HttpServletRequest request, int totalPrice, String ticketNumber) {
         long amount = totalPrice * 100L;
