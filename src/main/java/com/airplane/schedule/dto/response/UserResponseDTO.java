@@ -18,3 +18,6 @@ public class UserResponseDTO {
     String avatar;
     int roleId;
 }
+//dto
+//mapper
+//lombok

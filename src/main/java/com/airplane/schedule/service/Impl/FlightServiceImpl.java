@@ -86,8 +86,8 @@ public class FlightServiceImpl implements FlightSevice {
                 .pageIndex(flightSearchRequest.getPageIndex())
                 .totalElements(totalFlight)
                 .totalPages((int)(Math.ceil((double)totalFlight / flightSearchRequest.getPageSize())))
-                .hasNext((flightSearchRequest.getPageIndex() + 1) * flightSearchRequest.getPageSize() < totalFlight)
-                .hasPrevious(flightSearchRequest.getPageIndex() >0).build();
+                .hasNext(flightSearchRequest.getPageIndex() * flightSearchRequest.getPageSize() < totalFlight)
+                .hasPrevious(flightSearchRequest.getPageIndex() > 1).build();
         return PageApiResponse.<List<FlightResponseDTO>>builder()
                 .data(flightResponseDTOS)
                 .success(true)

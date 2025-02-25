@@ -151,8 +151,8 @@ public class UserServiceImpl implements UserService {
                 .pageIndex(userSearchRequest.getPageIndex())
                 .totalElements(totalUsers)
                 .totalPages((int)(Math.ceil((double)totalUsers / userSearchRequest.getPageSize())))
-                .hasNext((userSearchRequest.getPageIndex() + 1) * userSearchRequest.getPageSize() < totalUsers)
-                .hasPrevious(userSearchRequest.getPageIndex() >0).build();
+                .hasNext(userSearchRequest.getPageIndex() * userSearchRequest.getPageSize() < totalUsers)
+                .hasPrevious(userSearchRequest.getPageIndex() > 1).build();
         return PageApiResponse.<List<UserResponseDTO>>builder()
                 .data(userResponseDTOS)
                 .success(true)

@@ -15,7 +15,7 @@ import java.util.HashSet;
 
 @Entity
 @Data
-@Builder
+@Builder//lombok
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
